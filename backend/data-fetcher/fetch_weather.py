@@ -24,9 +24,9 @@ logger = logging.getLogger(__name__)
 
 # Configuration
 DATA_DIR = os.getenv('DATA_DIR', '/data/weather')
-NOAA_BASE_URL = "https://nomads.ncep.noaa.gov/cgi-bin/filter_gfs_0p25.pl"
-MAX_RETRIES = 3
-RETRY_DELAY = 60  # seconds
+NOAA_BASE_URL = "http://nomads.ncep.noaa.gov/cgi-bin/filter_gfs_0p25.pl"
+MAX_RETRIES = 1
+RETRY_DELAY = 10  # seconds
 
 # Weather parameters to download
 WEATHER_PARAMS = {
@@ -77,7 +77,7 @@ def download_grib_data(run_time, forecast_hour, param, output_file):
     for attempt in range(MAX_RETRIES):
         try:
             logger.info(f"Downloading {param} for forecast hour {forecast_hour} (attempt {attempt + 1}/{MAX_RETRIES})")
-            response = requests.get(url, timeout=300)
+            response = requests.get(url, timeout=300, verify=False)
             response.raise_for_status()
             
             with open(output_file, 'wb') as f:
@@ -110,13 +110,15 @@ def convert_to_netcdf(grib_files, output_file, param_name):
                 
                 # Flatten time dimensions: use valid_time if available, otherwise compute it
                 if 'valid_time' in ds.coords:
-                    # Rename valid_time to time and drop step dimension
-                    ds = ds.rename({'valid_time': 'time'})
+                    # Set 'time' coordinate values from 'valid_time' to avoid rename conflicts
+                    ds = ds.assign_coords(time=ds['valid_time'])
+                    # Drop helper coords
+                    ds = ds.drop_vars('valid_time', errors='ignore')
                     if 'step' in ds.coords:
                         ds = ds.drop_vars('step', errors='ignore')
                 elif 'time' in ds.coords and 'step' in ds.coords:
-                    # Compute valid_time from time + step
-                    ds['time'] = ds.time + ds.step
+                    # Compute valid_time from time + step and assign to 'time', then drop step
+                    ds = ds.assign_coords(time=ds.time + ds.step)
                     ds = ds.drop_vars('step', errors='ignore')
                 
                 # Expand time dimension if it's scalar

@@ -25,8 +25,9 @@ const WEATHER_LAYERS = {
         layer: 't2m',
         title: 'Temperature at 2m (°C)',
         colorRange: '220,320',  // Data is in Kelvin
-        palette: 'default-scalar/default',
-        unit: 'K'
+        palette: 'windy',       // High-contrast palette similar to Windy
+        unit: 'K',
+        gamma: '0.85'           // Increase contrast (lower than 1 = more contrast)
     },
     temp_850mb: {
         dataset: 'weather/temp_850mb/temp_850mb_2025102712.nc',
@@ -137,6 +138,7 @@ class WeatherMap {
             'COLORSCALERANGE': config.colorRange,
             'NUMCOLORBANDS': 250,
             'STYLES': config.palette,
+            'GAMMA': config.gamma || '0.85',
             'ABOVEMAXCOLOR': 'extend',
             'BELOWMINCOLOR': 'extend',
             'LOGSCALE': false
