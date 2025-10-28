@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Visualization System</title>
+    
+    <!-- OpenLayers CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@v9.0.0/ol.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1>Weather Visualization System</h1>
+            <div class="theme-toggle">
+                <button id="themeToggle" class="btn-icon" title="Toggle Dark Mode">
+                    <span class="icon">🌙</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Map Container -->
+            <div id="map" class="map-container"></div>
+
+            <!-- Loading Indicator -->
+            <div id="loading" class="loading-indicator hidden">
+                <div class="spinner"></div>
+                <p>Loading weather data...</p>
+            </div>
+
+            <!-- Controls Panel -->
+            <div class="controls-panel">
+                <!-- Weather Parameter Selection -->
+                <div class="control-group">
+                    <label for="weatherParam">Weather Parameter:</label>
+                    <select id="weatherParam" class="select-control">
+                        <option value="temp_2m">Temperature 2m (°C)</option>
+                        <option value="temp_850mb">Temperature 850mb (°C)</option>
+                        <option value="wind_speed_10m">Wind Speed 10m (m/s)</option>
+                        <option value="wind_speed_50m">Wind Speed 50m (m/s)</option>
+                        <option value="precip_rate">Precipitation (mm/hr)</option>
+                        <option value="mslp">Sea Level Pressure (hPa)</option>
+                        <option value="rh_2m">Relative Humidity (%)</option>
+                    </select>
+                </div>
+
+                <!-- Layer Toggle -->
+                <div class="control-group">
+                    <label>
+                        <input type="checkbox" id="layerToggle" checked>
+                        Show Weather Layer
+                    </label>
+                </div>
+
+                <!-- Opacity Control -->
+                <div class="control-group">
+                    <label for="opacitySlider">Layer Opacity: <span id="opacityValue">70%</span></label>
+                    <input type="range" id="opacitySlider" min="0" max="100" value="70" class="slider">
+                </div>
+
+                <!-- Animation Controls -->
+                <div class="control-group animation-controls">
+                    <h3>Animation</h3>
+                    <div class="button-group">
+                        <button id="playPauseBtn" class="btn-primary">
+                            <span id="playPauseIcon">▶</span> Play
+                        </button>
+                        <button id="stopBtn" class="btn-secondary">⏹ Stop</button>
+                    </div>
+
+                    <!-- Speed Control -->
+                    <div class="speed-control">
+                        <label>Speed:</label>
+                        <div class="button-group">
+                            <button class="btn-speed" data-speed="0.5">0.5x</button>
+                            <button class="btn-speed active" data-speed="1">1x</button>
+                            <button class="btn-speed" data-speed="2">2x</button>
+                            <button class="btn-speed" data-speed="4">4x</button>
+                        </div>
+                    </div>
+
+                    <!-- Timeline Slider -->
+                    <div class="timeline-control">
+                        <label for="timelineSlider">Forecast Time:</label>
+                        <input type="range" id="timelineSlider" min="0" max="0" value="0" class="slider timeline-slider">
+                        <div id="currentTime" class="current-time">--</div>
+                    </div>
+                </div>
+
+                <!-- Legend -->
+                <div class="control-group legend-container">
+                    <h3>Legend</h3>
+                    <div id="legend" class="legend">
+                        <img id="legendImage" src="" alt="Color scale legend" class="legend-image">
+                        <div class="legend-labels">
+                            <span id="legendMin">--</span>
+                            <span id="legendMax">--</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Current Value Display -->
+                <div class="control-group">
+                    <div id="currentValue" class="current-value">
+                        <strong>Value at cursor:</strong>
+                        <span id="valueDisplay">Move cursor over map</span>
+                    </div>
+                </div>
+
+                <!-- Status Messages -->
+                <div id="statusMessage" class="status-message hidden"></div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Weather data from NOAA GFS | Powered by OpenLayers & GeoServer</p>
+        </footer>
+    </div>
+
+    <!-- OpenLayers JS -->
+    <script src="https://cdn.jsdelivr.net/npm/ol@v9.0.0/dist/ol.js"></script>
+    
+    <!-- Custom JS Files (must be loaded in order) -->
+    <script src="js/map.js"></script>
+    <script src="js/animation.js"></script>
+    <script src="js/controls.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

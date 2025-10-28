@@ -1,0 +1,92 @@
+# Weather Visualization System - Git Ignore
+
+# ========================================
+# Environment & Configuration
+# ========================================
+.env
+*.env
+!.env.example
+
+# ========================================
+# Data & Logs
+# ========================================
+data/
+logs/
+*.log
+*.nc
+*.grb2
+*.grib2
+
+# ========================================
+# Docker
+# ========================================
+docker-compose.override.yml
+
+# ========================================
+# Python
+# ========================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+.pytest_cache/
+.coverage
+htmlcov/
+*.cover
+.hypothesis/
+
+# ========================================
+# IDEs & Editors
+# ========================================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# ========================================
+# Node.js (if using build tools)
+# ========================================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+
+# ========================================
+# Backups
+# ========================================
+*.bak
+*.backup
+*.tar.gz
+*.zip
+
+# ========================================
+# Temporary Files
+# ========================================
+tmp/
+temp/
+*.tmp
+.cache/

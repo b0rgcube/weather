@@ -1,0 +1,74 @@
+version: '3.8'
+
+services:
+  # THREDDS Data Server - Specialized for NetCDF/atmospheric data
+  thredds:
+    image: unidata/thredds-docker:5.5
+    container_name: weather-thredds
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./data/weather:/usr/local/tomcat/content/thredds/public/weather:ro
+      - ./backend/config/catalog.xml:/usr/local/tomcat/content/thredds/catalog.xml:ro
+      - thredds-config:/usr/local/tomcat/content/thredds
+    environment:
+      - THREDDS_XMX_SIZE=4G
+      - THREDDS_XMS_SIZE=1G
+      - TDM_PW=tdm_password
+      - TDS_HOST=http://localhost:8080
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8080/thredds/catalog.html || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 120s
+
+  # Data Fetcher Service
+  data-fetcher:
+    build:
+      context: ./backend/data-fetcher
+      dockerfile: Dockerfile
+    container_name: weather-fetcher
+    volumes:
+      - ./data/weather:/data/weather
+    environment:
+      - DATA_DIR=/data/weather
+      - FETCH_INTERVAL=21600
+      - NOAA_BASE_URL=https://nomads.ncep.noaa.gov/cgi-bin/filter_gfs_0p25.pl
+    restart: unless-stopped
+    depends_on:
+      thredds:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import os; exit(0 if os.path.exists('/data/weather') else 1)"]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+
+  # Frontend Web Server
+  nginx:
+    image: nginx:alpine
+    container_name: weather-frontend
+    ports:
+      - "8888:80"
+    volumes:
+      - ./frontend:/usr/share/nginx/html:ro
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    restart: unless-stopped
+    depends_on:
+      thredds:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  weather-data:
+  thredds-config:
+
+networks:
+  default:
+    name: weather-network

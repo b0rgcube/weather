@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <datasets>
+        <dataset id="weather" location="/data/weather/*.nc" title="GFS Weather Data" disabled="false">
+            <variable id="temp_2m">
+                <title>Temperature at 2m</title>
+                <colorScaleRange>
+                    <min>-40</min>
+                    <max>50</max>
+                </colorScaleRange>
+                <palette>Rainbow</palette>
+                <scaling>linear</scaling>
+            </variable>
+            <variable id="wind_speed_10m">
+                <title>Wind Speed at 10m</title>
+                <colorScaleRange>
+                    <min>0</min>
+                    <max>30</max>
+                </colorScaleRange>
+                <palette>Greyscale</palette>
+                <scaling>linear</scaling>
+            </variable>
+            <variable id="wind_speed_50m">
+                <title>Wind Speed at 50m</title>
+                <colorScaleRange>
+                    <min>0</min>
+                    <max>40</max>
+                </colorScaleRange>
+                <palette>Greyscale</palette>
+                <scaling>linear</scaling>
+            </variable>
+            <variable id="precip_rate">
+                <title>Precipitation Rate</title>
+                <colorScaleRange>
+                    <min>0</min>
+                    <max>10</max>
+                </colorScaleRange>
+                <palette>Blues</palette>
+                <scaling>linear</scaling>
+            </variable>
+            <variable id="mslp">
+                <title>Mean Sea Level Pressure</title>
+                <colorScaleRange>
+                    <min>96000</min>
+                    <max>104000</max>
+                </colorScaleRange>
+                <palette>RdYlGn</palette>
+                <scaling>linear</scaling>
+            </variable>
+            <variable id="rh_2m">
+                <title>Relative Humidity at 2m</title>
+                <colorScaleRange>
+                    <min>0</min>
+                    <max>100</max>
+                </colorScaleRange>
+                <palette>Blues</palette>
+                <scaling>linear</scaling>
+            </variable>
+        </dataset>
+    </datasets>
+    <cache>
+        <enabled>true</enabled>
+        <maxSize>1000</maxSize>
+        <lifetime>3600</lifetime>
+    </cache>
+</config>

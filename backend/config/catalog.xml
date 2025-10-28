@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<catalog name="Weather Data Catalog"
+         xmlns="http://www.unidata.ucar.edu/namespaces/thredds/InvCatalog/v1.0"
+         xmlns:xlink="http://www.w3.org/1999/xlink">
+
+  <service name="all" serviceType="Compound" base="">
+    <service name="odap" serviceType="OPENDAP" base="/thredds/dodsC/"/>
+    <service name="dap4" serviceType="DAP4" base="/thredds/dap4/"/>
+    <service name="http" serviceType="HTTPServer" base="/thredds/fileServer/"/>
+    <service name="wcs" serviceType="WCS" base="/thredds/wcs/"/>
+    <service name="wms" serviceType="WMS" base="/thredds/wms/"/>
+    <service name="ncss" serviceType="NetcdfSubset" base="/thredds/ncss/"/>
+  </service>
+
+  <!-- GFS Weather Data Collection -->
+  <dataset name="GFS Weather Data">
+    <metadata inherited="true">
+      <serviceName>all</serviceName>
+      <authority>weather.local</authority>
+      <dataType>GRID</dataType>
+      <dataFormat>NetCDF</dataFormat>
+      <documentation type="summary">
+        NOAA GFS 0.25 degree weather forecast data converted to NetCDF.
+        Data is updated every 6 hours with forecasts up to 48 hours.
+      </documentation>
+      <documentation xlink:href="https://www.ncdc.noaa.gov/data-access/model-data/model-datasets/global-forcast-system-gfs"
+                     xlink:title="GFS Documentation"/>
+      <creator>
+        <name vocabulary="DIF">NOAA/NCEP</name>
+        <contact url="https://www.weather.gov/" email=""/>
+      </creator>
+      <geospatialCoverage>
+        <northsouth>
+          <start>-90.0</start>
+          <size>180.0</size>
+          <units>degrees_north</units>
+        </northsouth>
+        <eastwest>
+          <start>0.0</start>
+          <size>360.0</size>
+          <units>degrees_east</units>
+        </eastwest>
+      </geospatialCoverage>
+    </metadata>
+
+    <!-- Temperature at 2m -->
+    <datasetScan name="Temperature at 2m" ID="temp_2m"
+                 path="weather/temp_2m"
+                 location="/usr/local/tomcat/content/thredds/public/weather/temp_2m">
+      <filter>
+        <include wildcard="temp_2m_*.nc"/>
+      </filter>
+      <metadata inherited="true">
+        <documentation type="summary">
+          Temperature at 2 meters above ground level in Celsius.
+          Updated every 6 hours with 48-hour forecasts.
+        </documentation>
+        <variables vocabulary="CF-1.6">
+          <variable name="t2m" vocabulary_name="air_temperature" units="K">
+            Temperature at 2m above ground
+          </variable>
+        </variables>
+      </metadata>
+    </datasetScan>
+
+    <!-- Temperature at 850mb -->
+    <datasetScan name="Temperature at 850mb" ID="temp_850mb"
+                 path="weather/temp_850mb"
+                 location="/usr/local/tomcat/content/thredds/public/weather/temp_850mb">
+      <filter>
+        <include wildcard="temp_850mb_*.nc"/>
+      </filter>
+      <metadata inherited="true">
+        <documentation type="summary">
+          Temperature at 850 millibar pressure level in Celsius.
+          Useful for identifying atmospheric conditions.
+        </documentation>
+      </metadata>
+    </datasetScan>
+
+    <!-- Wind Speed at 10m -->
+    <datasetScan name="Wind Speed at 10m" ID="wind_speed_10m"
+                 path="weather/wind_speed_10m"
+                 location="/usr/local/tomcat/content/thredds/public/weather/wind_speed_10m">
+      <filter>
+        <include wildcard="*wind_10m_*.nc"/>
+      </filter>
+      <metadata inherited="true">
+        <documentation type="summary">
+          Wind speed at 10 meters above ground in meters per second.
+          Standard height for surface wind measurements.
+        </documentation>
+        <variables vocabulary="CF-1.6">
+          <variable name="wind_speed" vocabulary_name="wind_speed" units="m s-1">
+            Wind Speed at 10m above ground
+          </variable>
+        </variables>
+      </metadata>
+    </datasetScan>
+
+    <!-- Wind Speed at 50m -->
+    <datasetScan name="Wind Speed at 50m" ID="wind_speed_50m"
+                 path="weather/wind_speed_50m"
+                 location="/usr/local/tomcat/content/thredds/public/weather/wind_speed_50m">
+      <filter>
+        <include wildcard="*wind_50m_*.nc"/>
+      </filter>
+      <metadata inherited="true">
+        <documentation type="summary">
+          Wind speed at 50 meters above ground in meters per second.
+          Relevant for wind energy applications.
+        </documentation>
+      </metadata>
+    </datasetScan>
+
+    <!-- Precipitation Rate -->
+    <datasetScan name="Precipitation Rate" ID="precip_rate"
+                 path="weather/precip_rate"
+                 location="/usr/local/tomcat/content/thredds/public/weather/precip_rate">
+      <filter>
+        <include wildcard="precip_rate_*.nc"/>
+      </filter>
+      <metadata inherited="true">
+        <documentation type="summary">
+          Precipitation rate at surface in millimeters per hour.
+          Indicates rainfall intensity.
+        </documentation>
+        <variables vocabulary="CF-1.6">
+          <variable name="prate" vocabulary_name="precipitation_flux" units="kg m-2 s-1">
+            Precipitation Rate
+          </variable>
+        </variables>
+      </metadata>
+    </datasetScan>
+
+    <!-- Mean Sea Level Pressure -->
+    <datasetScan name="Mean Sea Level Pressure" ID="mslp"
+                 path="weather/mslp"
+                 location="/usr/local/tomcat/content/thredds/public/weather/mslp">
+      <filter>
+        <include wildcard="mslp_*.nc"/>
+      </filter>
+      <metadata inherited="true">
+        <documentation type="summary">
+          Mean sea level pressure in Pascals.
+          Used to identify high and low pressure systems.
+        </documentation>
+        <variables vocabulary="CF-1.6">
+          <variable name="prmsl" vocabulary_name="air_pressure_at_sea_level" units="Pa">
+            Mean Sea Level Pressure
+          </variable>
+        </variables>
+      </metadata>
+    </datasetScan>
+
+    <!-- Relative Humidity at 2m -->
+    <datasetScan name="Relative Humidity at 2m" ID="rh_2m"
+                 path="weather/rh_2m"
+                 location="/usr/local/tomcat/content/thredds/public/weather/rh_2m">
+      <filter>
+        <include wildcard="rh_2m_*.nc"/>
+      </filter>
+      <metadata inherited="true">
+        <documentation type="summary">
+          Relative humidity at 2 meters above ground as a percentage.
+          Indicates moisture content in the air.
+        </documentation>
+        <variables vocabulary="CF-1.6">
+          <variable name="r2" vocabulary_name="relative_humidity" units="%">
+            Relative Humidity at 2m
+          </variable>
+        </variables>
+      </metadata>
+    </datasetScan>
+
+    <!-- U Wind Component at 10m -->
+    <datasetScan name="U Wind Component at 10m" ID="u_wind_10m"
+                 path="weather/u_wind_10m"
+                 location="/usr/local/tomcat/content/thredds/public/weather/">
+      <filter>
+        <include wildcard="u_wind_10m_*.nc"/>
+      </filter>
+    </datasetScan>
+
+    <!-- V Wind Component at 10m -->
+    <datasetScan name="V Wind Component at 10m" ID="v_wind_10m"
+                 path="weather/v_wind_10m"
+                 location="/usr/local/tomcat/content/thredds/public/weather/">
+      <filter>
+        <include wildcard="v_wind_10m_*.nc"/>
+      </filter>
+    </datasetScan>
+
+    <!-- U Wind Component at 50m -->
+    <datasetScan name="U Wind Component at 50m" ID="u_wind_50m"
+                 path="weather/u_wind_50m"
+                 location="/usr/local/tomcat/content/thredds/public/weather/">
+      <filter>
+        <include wildcard="u_wind_50m_*.nc"/>
+      </filter>
+    </datasetScan>
+
+    <!-- V Wind Component at 50m -->
+    <datasetScan name="V Wind Component at 50m" ID="v_wind_50m"
+                 path="weather/v_wind_50m"
+                 location="/usr/local/tomcat/content/thredds/public/weather/">
+      <filter>
+        <include wildcard="v_wind_50m_*.nc"/>
+      </filter>
+    </datasetScan>
+
+  </dataset>
+
+</catalog>
